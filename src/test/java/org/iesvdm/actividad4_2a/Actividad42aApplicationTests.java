@@ -111,4 +111,24 @@ class Actividad42aApplicationTests {
         peliculaActorRepository.save(peliculaActor2);
     }
 
+    public void borrarCategoria(long id) {
+        categoriaRepository.findById(id).ifPresent(categoria -> {
+            categoria.getPeliculas().forEach(pelicula -> {
+                pelicula.getCategorias().remove(categoria);
+                peliculaRepository.save(pelicula);
+            });
+            categoriaRepository.delete(categoria);
+        });
+    }
+
+    public void borrarPelicula(long id) {
+        peliculaRepository.findById(id).ifPresent(pelicula -> {
+            pelicula.getCategorias().forEach(categoria -> {
+                categoria.getPeliculas().remove(pelicula);
+                categoriaRepository.save(categoria);
+            });
+            peliculaRepository.delete(pelicula);
+        });
+    }
+
 }
